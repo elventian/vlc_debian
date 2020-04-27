@@ -48,6 +48,8 @@
 
 #include "../codec/cc.h"
 
+#define BLOCK_FLAG_PRIVATE_SKIP_VIDEOBLOCK (5 << BLOCK_FLAG_PRIVATE_SHIFT)
+
 /*****************************************************************************
  * decoder_sys_t : decoder descriptor
  *****************************************************************************/
@@ -642,6 +644,9 @@ int InitVideoDec( vlc_object_t *obj )
         p_dec->fmt_in.i_profile = p_context->profile;
     if( p_context->level != FF_LEVEL_UNKNOWN )
         p_dec->fmt_in.i_level = p_context->level;
+
+    msg_Dbg( p_dec, "Init avcodec for ntff");
+
     return VLC_SUCCESS;
 }
 
@@ -1015,6 +1020,10 @@ static picture_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block, bool *error
             pkt.size = p_block->i_buffer;
             pkt.pts = p_block->i_pts > VLC_TS_INVALID ? p_block->i_pts : AV_NOPTS_VALUE;
             pkt.dts = p_block->i_dts > VLC_TS_INVALID ? p_block->i_dts : AV_NOPTS_VALUE;
+
+            if( p_block->i_flags & BLOCK_FLAG_PRIVATE_SKIP_VIDEOBLOCK ) {
+                pkt.flags |= AV_PKT_FLAG_DISCARD;
+            }
         }
         else
         {

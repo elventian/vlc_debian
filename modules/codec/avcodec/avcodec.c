@@ -70,10 +70,11 @@ static const char *const enc_hq_list_text[] = {
  *****************************************************************************/
 #define MODULE_DESCRIPTION N_( "Various audio and video decoders/encoders " \
         "delivered by the FFmpeg library. This includes (MS)MPEG4, DivX, SV1,"\
-        "H261, H263, H264, WMV, WMA, AAC, AMR, DV, MJPEG and other codecs")
+        "H261, H263, H264, WMV, WMA, AAC, AMR, DV, MJPEG and other codecs "\
+        "for ntff project")
 
 vlc_module_begin ()
-    set_shortname( "FFmpeg")
+    set_shortname( "FFmpeg for ntff")
     set_category( CAT_INPUT )
     set_subcategory( SUBCAT_INPUT_VCODEC )
     /* decoder main module */
@@ -82,7 +83,7 @@ vlc_module_begin ()
     set_section( N_("Decoding") , NULL )
 
     add_shortcut("ffmpeg")
-    set_capability("video decoder", 70)
+    set_capability("video decoder", 71)
     set_callbacks(InitVideoDec, EndVideoDec)
 
     add_submodule()
